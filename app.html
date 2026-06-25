@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Prospekta App — B2B Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f6f8;--sur:#fff;--bdr:#e4e6ea;--bdr2:#d0d3da;
+  --t1:#111827;--t2:#4b5563;--t3:#9ca3af;
+  --grn:#16a34a;--grn-bg:#f0fdf4;--grn-bdr:#86efac;
+  --blu:#1d4ed8;--blu-bg:#eff6ff;--blu-bdr:#93c5fd;
+  --org:#c2410c;--org-bg:#fff7ed;--org-bdr:#fdba74;
+  --pur:#7c3aed;--pur-bg:#f5f3ff;--pur-bdr:#c4b5fd;
+  --red:#dc2626;--red-bg:#fef2f2;--red-bdr:#fca5a5;
+  --r:8px;--rl:12px;
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--t1);font-size:14px;line-height:1.5;min-height:100vh}
+a{color:inherit;text-decoration:none}
+input,select,textarea,button{font-family:inherit;font-size:13px;outline:none}
+button{cursor:pointer;transition:all .15s}
+
+/* ── Nav ── */
+.nav{background:var(--sur);border-bottom:1px solid var(--bdr);padding:0 24px;display:flex;align-items:center;gap:2px;position:sticky;top:0;z-index:200;height:52px}
+.nav-logo{font-weight:700;font-size:19px;letter-spacing:-0.5px;margin-right:20px;color:var(--t1)}
+.nav-logo span{color:var(--grn)}
+.nav-back{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--t3);margin-right:16px;padding:6px 10px;border-radius:6px;border:1px solid var(--bdr2);background:var(--sur);transition:all .15s}
+.nav-back:hover{color:var(--t1);border-color:var(--t1)}
+.ntab{background:none;border:none;border-bottom:2px solid transparent;border-radius:0;padding:0 14px;height:52px;font-size:13px;font-weight:500;color:var(--t3);white-space:nowrap}
+.ntab:hover{color:var(--t2)}
+.ntab.on{color:var(--t1);border-bottom-color:var(--t1)}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:10px}
+.cred-badge{background:var(--org-bg);color:var(--org);border:1px solid var(--org-bdr);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600}
+.uav{width:30px;height:30px;border-radius:50%;background:var(--grn-bg);color:var(--grn);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+/* ── Page ── */
+.page{padding:20px 24px;max-width:1120px;margin:0 auto;display:none}
+.page.on{display:block}
+
+/* ── Cards ── */
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--rl);padding:16px}
+.card-sm{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:12px 14px}
+
+/* ── Buttons ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;border-radius:var(--r);padding:7px 14px;font-size:12px;font-weight:500;border:1px solid var(--bdr2);background:var(--sur);color:var(--t1)}
+.btn:hover{background:var(--bg)}
+.btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+.btn-g{background:var(--grn);color:#fff;border-color:var(--grn)}.btn-g:hover{background:#15803d}
+.btn-b{background:var(--blu);color:#fff;border-color:var(--blu)}.btn-b:hover{background:#1e40af}
+.btn-sm{padding:5px 10px;font-size:11px}
+.btn-xs{padding:3px 8px;font-size:11px}
+.btn-w{width:100%;padding:10px}
+.btn-icon{padding:6px 8px}
+
+/* ── Inputs ── */
+.inp{width:100%;padding:8px 10px;border:1px solid var(--bdr2);border-radius:var(--r);font-size:13px;background:var(--sur);color:var(--t1);transition:border-color .15s}
+.inp:focus{border-color:var(--blu)}
+textarea.inp{resize:vertical;min-height:88px}
+.lbl{display:block;font-size:11px;color:var(--t3);margin-bottom:4px;font-weight:500;letter-spacing:.3px}
+
+/* ── Grid ── */
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+
+/* ── Badges ── */
+.badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;border:1px solid}
+.bh{background:var(--grn-bg);color:var(--grn);border-color:var(--grn-bdr)}
+.be{background:var(--blu-bg);color:var(--blu);border-color:var(--blu-bdr)}
+.bf{background:var(--org-bg);color:var(--org);border-color:var(--org-bdr)}
+
+/* ── Intent bar ── */
+.ibar{height:3px;background:#f0f0f0;border-radius:2px;margin:8px 0}
+.ifill{height:3px;border-radius:2px}
+
+/* ── Kanban ── */
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kcol{background:#f9fafb;border:1px solid var(--bdr);border-radius:var(--rl);padding:12px;min-height:380px;transition:all .15s}
+.kcol.dov{border-color:var(--blu);background:var(--blu-bg)}
+.kcard{background:#fff;border:1px solid var(--bdr);border-radius:var(--r);padding:10px 12px;margin-bottom:8px;cursor:grab;transition:box-shadow .15s}
+.kcard:hover{box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.kcard:active{cursor:grabbing}
+
+/* ── Toast ── */
+.toast{position:fixed;top:14px;right:14px;z-index:9999;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;box-shadow:0 4px 16px rgba(0,0,0,.12);display:none;opacity:0;transition:opacity .25s}
+.toast.ts{background:var(--grn-bg);color:var(--grn);border:1px solid var(--grn-bdr)}
+.toast.te{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bdr)}
+
+/* ── Loader ── */
+.ld{display:inline-block;width:13px;height:13px;border:2px solid #ddd;border-top-color:var(--grn);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── AI output ── */
+.aio{font-size:13px;line-height:1.9;color:#1f2937;white-space:pre-wrap;background:#f9fafb;padding:16px;border-radius:8px;border:1px solid var(--bdr);min-height:300px;font-family:inherit}
+
+/* ── Pill tabs ── */
+.pills{display:flex;gap:6px;flex-wrap:wrap}
+.pill{background:var(--sur);border:1px solid var(--bdr2);border-radius:20px;padding:5px 12px;font-size:11px;font-weight:500;cursor:pointer;color:var(--t2)}
+.pill.on{background:var(--blu);color:#fff;border-color:var(--blu)}
+
+/* ── Bar chart ── */
+.btrack{height:8px;background:#f0f0f0;border-radius:4px}
+.bfill{height:8px;border-radius:4px;transition:width .7s}
+
+/* ── Empty state ── */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px;color:var(--t3);gap:8px;text-align:center}
+.empty-icon{font-size:36px}
+
+/* ── Stat card ── */
+.scard{background:var(--sur);border:1px solid var(--bdr);border-radius:var(--r);padding:14px 16px}
+.sval{font-size:26px;font-weight:700;line-height:1;margin-top:4px}
+.ssub{font-size:11px;color:var(--t3);margin-top:3px}
+
+/* ── Connection banner ── */
+.banner{border-radius:var(--r);padding:12px 16px;font-size:12px;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.banner-warn{background:var(--org-bg);color:var(--org);border:1px solid var(--org-bdr)}
+.banner-ok{background:var(--grn-bg);color:var(--grn);border:1px solid var(--grn-bdr)}
+
+/* ── Plan card ── */
+.plan-card{border:2px solid var(--bdr);border-radius:var(--rl);padding:16px;margin-bottom:10px;cursor:pointer;transition:all .15s}
+.plan-card:hover{border-color:var(--blu-bdr)}
+.plan-card.on{border-color:var(--blu);background:var(--blu-bg)}
+
+/* ── Chrome ext ── */
+.ext{background:#0f172a;border-radius:10px;padding:14px;color:#e2e8f0}
+
+@media(max-width:768px){
+  .g4{grid-template-columns:1fr 1fr}
+  .kanban{grid-template-columns:1fr 1fr}
+  .g2{grid-template-columns:1fr}
+  .cg{grid-template-columns:1fr}
+  .nav{padding:0 12px}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"></div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-logo">Prosp<span>ekta</span></div>
+  <a class="nav-back" href="https://prospekta.in">← Back to site</a>
+  <button class="ntab on" onclick="goTab('search',this)">🔍 Search</button>
+  <button class="ntab" onclick="goTab('writer',this)">✍ AI Writer</button>
+  <button class="ntab" onclick="goTab('pipeline',this)">📋 Pipeline</button>
+  <button class="ntab" onclick="goTab('signals',this)">⚡ Signals</button>
+  <button class="ntab" onclick="goTab('analytics',this)">📊 Analytics</button>
+  <button class="ntab" onclick="goTab('settings',this)">⚙ Settings</button>
+  <div class="nav-r">
+    <div class="cred-badge" id="cred-badge">🪙 50 credits</div>
+    <div class="uav">T</div>
+  </div>
+</nav>
+
+<!-- ══════════════════ SEARCH ══════════════════ -->
+<div class="page on" id="pg-search">
+  <div id="conn-banner"></div>
+  <div class="g4" style="margin-bottom:14px">
+    <div class="scard"><div style="font-size:11px;color:var(--t3)">Contacts found</div><div class="sval" id="s-found">—</div><div class="ssub">matching filters</div></div>
+    <div class="scard"><div style="font-size:11px;color:var(--t3)">Credits left</div><div class="sval" id="s-cred">—</div><div class="ssub">of 50 free</div></div>
+    <div class="scard"><div style="font-size:11px;color:var(--t3)">High intent</div><div class="sval" id="s-intent">—</div><div class="ssub">score ≥85%</div></div>
+    <div class="scard"><div style="font-size:11px;color:var(--t3)">In pipeline</div><div class="sval" id="s-pipe">—</div><div class="ssub">prospects</div></div>
+  </div>
+  <div class="card" style="margin-bottom:12px;display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+    <input class="inp" id="q" placeholder="🔍  Name, company or city…" style="flex:1;min-width:160px" oninput="loadContacts()"/>
+    <select class="inp" id="f-sector" style="width:auto;min-width:120px" onchange="loadContacts()">
+      <option value="">All sectors</option>
+      <option>Steel</option><option>FMCG</option><option>Cement</option><option>Real Estate</option>
+    </select>
+    <select class="inp" id="f-sen" style="width:auto;min-width:130px" onchange="loadContacts()">
+      <option value="">All seniority</option>
+      <option>C-Suite</option><option>VP</option><option>Director</option><option>Head</option><option>Manager</option>
+    </select>
+    <select class="inp" id="f-sig" style="width:auto;min-width:120px" onchange="loadContacts()">
+      <option value="">All signals</option>
+      <option value="hiring">Hiring</option><option value="expansion">Expansion</option><option value="funding">Funding</option>
+    </select>
+    <span style="font-size:11px;color:var(--t3)" id="res-count"></span>
+  </div>
+  <div class="cg" id="contacts-grid">
+    <div style="grid-column:1/-1" class="empty"><div class="ld"></div><div>Loading contacts…</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ AI WRITER ══════════════════ -->
+<div class="page" id="pg-writer">
+  <div class="g2">
+    <div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-weight:600;font-size:13px;margin-bottom:12px">👤 Selected Prospect</div>
+        <div id="wp-empty" class="empty" style="padding:24px 0">
+          <div class="empty-icon">👤</div>
+          <div style="font-size:12px">Go to Search → click ✍ on any contact</div>
+        </div>
+        <div id="wp-filled" style="display:none"></div>
+      </div>
+      <div class="card" style="margin-bottom:12px">
+        <div style="font-weight:600;font-size:13px;margin-bottom:14px">⚙ Outreach settings</div>
+        <div style="margin-bottom:12px">
+          <div class="lbl">Format</div>
+          <div class="pills" id="pt-fmt">
+            <span class="pill on" onclick="setPill(this,'pt-fmt')">Email</span>
+            <span class="pill" onclick="setPill(this,'pt-fmt')">LinkedIn DM</span>
+            <span class="pill" onclick="setPill(this,'pt-fmt')">Sequence</span>
+          </div>
+        </div>
+        <div style="margin-bottom:12px">
+          <div class="lbl">Tone</div>
+          <div class="pills" id="pt-tone">
+            <span class="pill on" onclick="setPill(this,'pt-tone')">Professional</span>
+            <span class="pill" onclick="setPill(this,'pt-tone')">Casual</span>
+            <span class="pill" onclick="setPill(this,'pt-tone')">Bold</span>
+          </div>
+        </div>
+        <div style="margin-bottom:10px">
+          <label class="lbl">Your product / service</label>
+          <input class="inp" id="ai-prod" value="CogniSense AI Platform"/>
+        </div>
+        <div>
+          <label class="lbl">Value proposition</label>
+          <textarea class="inp" id="ai-pitch">Our AI predictive maintenance platform cuts unplanned downtime by 40% for industrial plants — without replacing existing SCADA systems.</textarea>
+        </div>
+      </div>
+      <button class="btn btn-g btn-w" id="gen-btn" onclick="generate()" disabled>✨ Generate outreach</button>
+    </div>
+    <div class="card">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-weight:600;font-size:13px" id="out-lbl">📧 Output</div>
+        <div id="out-actions" style="display:none;gap:6px" class="flex">
+          <button class="btn btn-sm" onclick="copyOut()">📋 Copy</button>
+          <button class="btn btn-sm btn-g" onclick="saveToPipe()">✓ Add to pipeline</button>
+        </div>
+      </div>
+      <div id="out-area" class="aio" style="display:flex;align-items:center;justify-content:center">
+        <div class="empty"><div class="empty-icon">✍</div><div>Pick a contact and click Generate</div><div style="font-size:11px">Real Claude AI writes personalised outreach using buying signals</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PIPELINE ══════════════════ -->
+<div class="page" id="pg-pipeline">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div>
+      <div style="font-weight:700;font-size:16px">Sales pipeline</div>
+      <div style="font-size:12px;color:var(--t3);margin-top:2px" id="pipe-sub">Loading…</div>
+    </div>
+  </div>
+  <div class="kanban" id="kanban"></div>
+  <div style="text-align:center;font-size:11px;color:var(--t3);margin-top:10px">Drag cards between columns · Click Next → to advance stage</div>
+</div>
+
+<!-- ══════════════════ SIGNALS ══════════════════ -->
+<div class="page" id="pg-signals">
+  <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:14px;gap:12px;flex-wrap:wrap">
+    <div>
+      <div style="font-weight:700;font-size:16px">Live intent signals</div>
+      <div style="font-size:12px;color:var(--t3);margin-top:2px">Sorted by buying intent — reach out while signals are hot</div>
+    </div>
+    <div class="pills" id="sig-filter">
+      <span class="pill on" onclick="setPill(this,'sig-filter');loadSignals()">All</span>
+      <span class="pill" onclick="setPill(this,'sig-filter');loadSignals()">Hiring</span>
+      <span class="pill" onclick="setPill(this,'sig-filter');loadSignals()">Expansion</span>
+      <span class="pill" onclick="setPill(this,'sig-filter');loadSignals()">Funding</span>
+    </div>
+  </div>
+  <div id="sig-list"></div>
+</div>
+
+<!-- ══════════════════ ANALYTICS ══════════════════ -->
+<div class="page" id="pg-analytics">
+  <div style="font-weight:700;font-size:16px;margin-bottom:16px">Analytics overview</div>
+  <div class="g4" style="margin-bottom:14px" id="an-kpi"></div>
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card" id="an-sector"></div>
+    <div class="card" id="an-intent"></div>
+  </div>
+  <div class="card" id="an-pipe"></div>
+</div>
+
+<!-- ══════════════════ SETTINGS ══════════════════ -->
+<div class="page" id="pg-settings">
+  <div class="g2">
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:600;font-size:14px;margin-bottom:16px">Profile</div>
+        <label class="lbl">Full name</label>
+        <input class="inp" value="Tony" style="margin-bottom:10px"/>
+        <label class="lbl">Company</label>
+        <input class="inp" value="Citriot.ai" style="margin-bottom:10px"/>
+        <label class="lbl">Email</label>
+        <input class="inp" value="tony@citriot.ai" readonly style="background:#f9f9f9;color:var(--t3);margin-bottom:14px"/>
+        <button class="btn btn-g" onclick="toast('Profile saved ✓')">Save changes</button>
+      </div>
+      <div class="card" style="margin-bottom:14px">
+        <div style="font-weight:600;font-size:14px;margin-bottom:14px">API Configuration</div>
+        <label class="lbl">Backend URL (your Railway URL)</label>
+        <input class="inp" id="api-url" style="margin-bottom:10px" placeholder="https://your-app.up.railway.app"/>
+        <button class="btn btn-g" onclick="saveApiUrl()">Save & test connection</button>
+        <div id="api-status" style="margin-top:8px;font-size:12px"></div>
+      </div>
+      <div class="ext">
+        <div style="font-size:11px;color:#94a3b8;margin-bottom:10px;font-weight:600;letter-spacing:.5px">🔌 CHROME EXTENSION PREVIEW</div>
+        <div style="background:#1e293b;border:1px solid #334155;border-radius:8px;padding:12px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <div style="width:32px;height:32px;border-radius:50%;background:#1e3a5f;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#93c5fd">PK</div>
+            <div><div style="font-size:12px;font-weight:600;color:#fff">Priya Kapoor</div><div style="font-size:10px;color:#93c5fd">Head Procurement · L&T</div></div>
+            <div style="margin-left:auto;font-size:10px;background:#14532d;color:#86efac;padding:2px 7px;border-radius:10px;font-weight:600">⚡ Hiring</div>
+          </div>
+          <div style="display:flex;gap:6px">
+            <button style="flex:1;background:#1d4ed8;color:#fff;border:none;border-radius:5px;padding:5px;font-size:11px;cursor:pointer">👁 Reveal</button>
+            <button style="flex:1;background:#16a34a;color:#fff;border:none;border-radius:5px;padding:5px;font-size:11px;cursor:pointer">✍ Write</button>
+          </div>
+        </div>
+        <div style="font-size:10px;color:#475569;text-align:center;margin-top:8px">Overlay appears on LinkedIn profiles automatically</div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-weight:600;font-size:14px;margin-bottom:16px">Plan & billing</div>
+      <div id="plan-cards"></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px">DPDP Act compliant · Cancel anytime · Indian billing in ₹</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Config ──────────────────────────────────────────────────────
+let API = localStorage.getItem('prospekta_api') || 'https://YOUR-APP.up.railway.app';
+let contacts = [];
+let currentContact = null;
+let dragItem = null;
+let aiText = '';
+let activePlan = 'growth';
+
+const PLANS = [
+  {id:'starter',name:'Starter',price:'₹4,999/mo',features:['500 reveals/month','100 AI drafts/month','CSV export','Chrome extension']},
+  {id:'growth',name:'Growth',price:'₹11,999/mo',badge:'Most Popular',features:['Unlimited reveals','Unlimited AI drafts','Real-time intent signals','HubSpot / Salesforce sync','Sequence automation']},
+  {id:'enterprise',name:'Enterprise',price:'Custom',features:['Unlimited API access','Custom sector data builds','White-label option','Dedicated account manager','SLA guarantee']},
+];
+
+const SIG_META = {
+  hiring:    {cls:'bh', lbl:'Hiring',    col:'var(--grn)'},
+  expansion: {cls:'be', lbl:'Expansion', col:'var(--blu)'},
+  funding:   {cls:'bf', lbl:'Funding',   col:'var(--org)'},
+};
+const STAGES = ['prospect','contacted','replied','closed'];
+const STAGE_META = {
+  prospect:  {lbl:'Prospects', col:'#475569', bg:'#f1f5f9'},
+  contacted: {lbl:'Contacted', col:'var(--blu)', bg:'var(--blu-bg)'},
+  replied:   {lbl:'Replied',   col:'var(--org)', bg:'var(--org-bg)'},
+  closed:    {lbl:'Closed ✓', col:'var(--grn)', bg:'var(--grn-bg)'},
+};
+const PAL=[['#ede9fe','#7c3aed'],['#dcfce7','#16a34a'],['#ffedd5','#c2410c'],['#fee2e2','#dc2626'],['#e0f2fe','#0369a1']];
+
+// ── Helpers ──────────────────────────────────────────────────────
+function av(name,sz=36){
+  const [bg,tc]=PAL[name.charCodeAt(0)%5];
+  const init=name.split(' ').map(n=>n[0]).join('').slice(0,2);
+  return `<div style="width:${sz}px;height:${sz}px;border-radius:50%;background:${bg};color:${tc};display:flex;align-items:center;justify-content:center;font-size:${sz>38?13:11}px;font-weight:700;flex-shrink:0">${init}</div>`;
+}
+function ibar(v){
+  const c=v>=85?'var(--grn)':v>=70?'var(--org)':'var(--red)';
+  return `<div class="ibar"><div class="ifill" style="width:${v}%;background:${c}"></div></div>`;
+}
+function toast(msg,type='s'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className=`toast t${type}`;
+  el.style.display='block';el.style.opacity='1';
+  setTimeout(()=>{el.style.opacity='0';setTimeout(()=>el.style.display='none',300);},2500);
+}
+function setPill(el,gid){
+  document.querySelectorAll(`#${gid} .pill`).forEach(p=>p.classList.remove('on'));
+  el.classList.add('on');
+}
+function getP(gid){return (document.querySelector(`#${gid} .pill.on`)||{}).textContent?.trim()||'';}
+function goTab(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+name).classList.add('on');
+  btn.classList.add('on');
+  if(name==='search')loadContacts();
+  if(name==='pipeline')loadPipeline();
+  if(name==='signals')loadSignals();
+  if(name==='analytics')loadAnalytics();
+  if(name==='settings'){renderPlans();loadApiUrl();}
+}
+async function apiFetch(path,opts={}){
+  const r=await fetch(API+path,{headers:{'Content-Type':'application/json'},...opts});
+  if(!r.ok){const e=await r.json().catch(()=>({error:r.statusText}));throw new Error(e.error||'Request failed');}
+  return r;
+}
+
+// ── Connection check ─────────────────────────────────────────────
+async function checkConn(){
+  const b=document.getElementById('conn-banner');
+  try{
+    const r=await fetch(API+'/api/credits');
+    if(r.ok){
+      const c=await r.json();
+      const rem=c.total-c.used;
+      document.getElementById('cred-badge').textContent='🪙 '+rem+' credits';
+      document.getElementById('s-cred').textContent=rem;
+      b.innerHTML='';
+    }
+  }catch(e){
+    b.innerHTML=`<div class="banner banner-warn">⚠ Backend not connected. <strong>Enter your Railway URL in Settings → API Configuration</strong> to activate the platform.</div>`;
+  }
+}
+
+// ── SEARCH ───────────────────────────────────────────────────────
+async function loadContacts(){
+  const grid=document.getElementById('contacts-grid');
+  grid.innerHTML='<div style="grid-column:1/-1" class="empty"><div class="ld"></div><div>Loading…</div></div>';
+  const p=new URLSearchParams({q:document.getElementById('q').value,sector:document.getElementById('f-sector').value,seniority:document.getElementById('f-sen').value,sig_type:document.getElementById('f-sig').value});
+  try{
+    const r=await apiFetch('/api/contacts?'+p);
+    contacts=await r.json();
+    document.getElementById('s-found').textContent=contacts.length;
+    document.getElementById('res-count').textContent=contacts.length+' results';
+    document.getElementById('s-intent').textContent=contacts.filter(c=>c.intent>=85).length;
+    if(!contacts.length){grid.innerHTML='<div style="grid-column:1/-1" class="empty"><div class="empty-icon">🔍</div><div>No contacts match your filters</div></div>';return;}
+    grid.innerHTML=contacts.map(cCard).join('');
+    refreshPipeCount();
+  }catch(e){
+    grid.innerHTML=`<div style="grid-column:1/-1" class="empty">
+      <div style="font-size:28px">⚠️</div>
+      <div style="color:var(--red);font-weight:500">Backend not connected</div>
+      <div style="font-size:12px">Go to <strong>Settings → API Configuration</strong> and enter your Railway URL</div>
+    </div>`;
+  }
+}
+function cCard(c){
+  const s=SIG_META[c.sig_type]||SIG_META.hiring;
+  const ic=c.intent>=85?'var(--grn)':c.intent>=70?'var(--org)':'var(--red)';
+  const rev=c.email
+    ?`<div style="flex:1;background:var(--blu-bg);border-radius:6px;padding:7px 10px;font-size:11px"><div style="color:var(--blu)">✉ ${c.email}</div><div style="color:var(--blu);margin-top:2px">📱 ${c.mobile}</div></div>`
+    :`<button class="btn btn-sm" style="flex:1" onclick="reveal(${c.id})">👁 Reveal (1 credit)</button>`;
+  return `<div class="card" style="transition:box-shadow .15s" onmouseenter="this.style.boxShadow='0 2px 14px rgba(0,0,0,.07)'" onmouseleave="this.style.boxShadow='none'">
+    <div style="display:flex;gap:10px;margin-bottom:10px">
+      ${av(c.name)}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:600;font-size:13px">${c.name}</div>
+        <div style="font-size:11px;color:var(--t2);margin-top:1px">${c.role} · ${c.company}</div>
+        <div style="font-size:11px;color:var(--t3)">${c.city} · ${c.sector}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0">
+        <span class="badge ${s.cls}">${s.lbl}</span>
+        <div style="font-size:11px;color:var(--t3);margin-top:4px">${c.intent}% intent</div>
+        <div style="font-size:10px;color:#d1d5db">${c.freshness}% fresh</div>
+      </div>
+    </div>
+    <div style="background:#f9fafb;border-radius:6px;padding:6px 9px;margin-bottom:8px;font-size:11px;color:var(--t2)">
+      <span style="color:${s.col};font-weight:600">⚡</span> ${c.signal}
+    </div>
+    ${ibar(c.intent)}
+    <div style="display:flex;gap:6px;margin-top:10px">
+      ${rev}
+      <button class="btn btn-icon" onclick="addPipe(${c.id})" title="Add to pipeline">＋</button>
+      <button class="btn btn-icon btn-g" onclick="gotoWriter(${c.id})" title="Write outreach">✍</button>
+    </div>
+  </div>`;
+}
+async function reveal(id){
+  try{
+    const r=await apiFetch('/api/contacts/'+id+'/reveal',{method:'POST'});
+    const d=await r.json();
+    const rem=d.credits.total-d.credits.used;
+    document.getElementById('cred-badge').textContent='🪙 '+rem+' credits';
+    document.getElementById('s-cred').textContent=rem;
+    toast('Contact revealed — 1 credit used');
+    loadContacts();
+  }catch(e){toast(e.message,'e');}
+}
+async function addPipe(cid){
+  try{await apiFetch('/api/pipeline',{method:'POST',body:JSON.stringify({contact_id:cid})});toast('Added to pipeline ✓');refreshPipeCount();}
+  catch(e){toast(e.message,'e');}
+}
+async function refreshPipeCount(){
+  try{const r=await apiFetch('/api/analytics');const d=await r.json();document.getElementById('s-pipe').textContent=d.pipelineTotal;}catch(e){}
+}
+function gotoWriter(id){
+  const c=contacts.find(x=>x.id===id);
+  if(!c)return;
+  currentContact=c;
+  setWP(c);
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  const tab=document.querySelectorAll('.ntab')[1];
+  tab.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById('pg-writer').classList.add('on');
+}
+function setWP(c){
+  const s=SIG_META[c.sig_type]||SIG_META.hiring;
+  document.getElementById('wp-empty').style.display='none';
+  document.getElementById('wp-filled').style.display='';
+  document.getElementById('wp-filled').innerHTML=`
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px">
+      ${av(c.name,38)}
+      <div style="flex:1"><div style="font-weight:600;font-size:13px">${c.name}</div><div style="font-size:11px;color:var(--t2)">${c.role} · ${c.company}</div></div>
+      <button class="btn btn-xs" onclick="clearWP()">✕</button>
+    </div>
+    <div style="background:${s.cls==='bh'?'var(--grn-bg)':s.cls==='be'?'var(--blu-bg)':'var(--org-bg)'};border-radius:6px;padding:6px 9px;font-size:11px;color:${s.col};font-weight:500">⚡ ${c.signal}</div>`;
+  document.getElementById('gen-btn').disabled=false;
+}
+function clearWP(){
+  currentContact=null;
+  document.getElementById('wp-empty').style.display='';
+  document.getElementById('wp-filled').style.display='none';
+  document.getElementById('gen-btn').disabled=true;
+  document.getElementById('out-actions').style.display='none';
+  document.getElementById('out-area').className='aio';
+  document.getElementById('out-area').innerHTML='<div class="empty"><div class="empty-icon">✍</div><div>Pick a contact and click Generate</div></div>';
+  aiText='';
+}
+
+// ── AI WRITER ────────────────────────────────────────────────────
+async function generate(){
+  if(!currentContact){toast('Select a contact first','e');return;}
+  const fmtRaw=getP('pt-fmt').toLowerCase();
+  const fmt=fmtRaw.includes('linkedin')?'linkedin':fmtRaw.includes('seq')?'sequence':'email';
+  const tone=getP('pt-tone').toLowerCase();
+  const btn=document.getElementById('gen-btn');
+  btn.disabled=true;btn.innerHTML='<span class="ld"></span> Generating…';
+  const out=document.getElementById('out-area');
+  out.className='aio';out.textContent='';aiText='';
+  document.getElementById('out-actions').style.display='none';
+  try{
+    const res=await fetch(API+'/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contact_id:currentContact.id,format:fmt,tone,product:document.getElementById('ai-prod').value,pitch:document.getElementById('ai-pitch').value})});
+    if(!res.ok)throw new Error('Generation failed — check API key');
+    const reader=res.body.getReader();
+    const dec=new TextDecoder();
+    while(true){
+      const {done,value}=await reader.read();
+      if(done)break;
+      const lines=dec.decode(value).split('\n');
+      for(const line of lines){
+        if(!line.startsWith('data: '))continue;
+        try{
+          const d=JSON.parse(line.slice(6));
+          if(d.text){aiText+=d.text;out.textContent=aiText+'▋';}
+          if(d.done){out.textContent=aiText;document.getElementById('out-actions').style.display='flex';toast('Outreach generated ✓');}
+          if(d.error)throw new Error(d.error);
+        }catch(err){if(err.message&&!err.message.includes('JSON'))throw err;}
+      }
+    }
+  }catch(e){
+    out.innerHTML=`<div style="color:var(--red);font-size:13px">⚠ ${e.message}</div><div style="margin-top:8px;font-size:12px;color:var(--t3)">Make sure your Railway backend is running and ANTHROPIC_API_KEY is set.</div>`;
+  }finally{btn.disabled=false;btn.innerHTML='✨ Generate outreach';}
+}
+function copyOut(){try{navigator.clipboard.writeText(aiText);toast('Copied!');}catch(e){toast('Copy failed','e');}}
+async function saveToPipe(){if(currentContact)await addPipe(currentContact.id);}
+
+// ── PIPELINE ─────────────────────────────────────────────────────
+async function loadPipeline(){
+  const board=document.getElementById('kanban');
+  board.innerHTML='<div style="grid-column:1/-1" class="empty"><div class="ld"></div></div>';
+  try{
+    const r=await apiFetch('/api/pipeline');
+    const data=await r.json();
+    const total=Object.values(data).flat().length;
+    document.getElementById('pipe-sub').textContent=total+' contacts · drag cards to move stages';
+    document.getElementById('s-pipe').textContent=total;
+    board.innerHTML='';
+    STAGES.forEach(stage=>{
+      const m=STAGE_META[stage];
+      const items=data[stage]||[];
+      const col=document.createElement('div');
+      col.className='kcol';col.dataset.stage=stage;
+      col.addEventListener('dragover',e=>{e.preventDefault();col.classList.add('dov');});
+      col.addEventListener('dragleave',()=>col.classList.remove('dov'));
+      col.addEventListener('drop',async e=>{
+        e.preventDefault();col.classList.remove('dov');
+        if(!dragItem||dragItem.stage===stage)return;
+        try{await apiFetch('/api/pipeline/'+dragItem.id,{method:'PATCH',body:JSON.stringify({stage})});toast('Moved to '+stage);loadPipeline();}catch(e){toast(e.message,'e');}
+      });
+      col.innerHTML=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">
+        <span style="font-size:11px;font-weight:700;color:${m.col};background:${m.bg};padding:3px 9px;border-radius:20px">${m.lbl}</span>
+        <span style="font-size:11px;color:var(--t3);margin-left:auto">${items.length}</span>
+      </div>
+      ${items.length===0?'<div class="empty" style="padding:30px 0"><div style="font-size:22px">📥</div><div style="font-size:11px">Drop here</div></div>':''}
+      ${items.map(c=>{
+        const si=STAGE_META[stage];
+        const sg=SIG_META[c.sig_type]||SIG_META.hiring;
+        return `<div class="kcard" draggable="true" data-pid="${c.id}" data-stage="${stage}">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">${av(c.name,28)}<div><div style="font-weight:600;font-size:12px">${c.name}</div><div style="font-size:10px;color:var(--t3)">${c.company}</div></div></div>
+          <div style="font-size:11px;color:var(--t2);margin-bottom:5px">${c.role}</div>
+          <div style="margin-bottom:8px"><span class="badge ${sg.cls}">${sg.lbl}</span></div>
+          <div style="display:flex;gap:5px">
+            ${stage!=='closed'?`<button class="btn btn-xs" style="flex:1" onclick="moveNext(${c.id},'${stage}')">Next →</button>`:''}
+            <button class="btn btn-xs" style="color:var(--red);border-color:var(--red-bdr)" onclick="removePipe(${c.id})">✕</button>
+          </div>
+        </div>`;
+      }).join('')}`;
+      col.querySelectorAll('.kcard').forEach(card=>{
+        card.addEventListener('dragstart',()=>{dragItem={id:parseInt(card.dataset.pid),stage:card.dataset.stage};});
+      });
+      board.appendChild(col);
+    });
+  }catch(e){board.innerHTML='<div style="grid-column:1/-1" class="empty"><div style="color:var(--red)">⚠ '+e.message+'</div></div>';}
+}
+async function moveNext(id,stage){
+  const next=STAGES[STAGES.indexOf(stage)+1];
+  if(!next)return;
+  try{await apiFetch('/api/pipeline/'+id,{method:'PATCH',body:JSON.stringify({stage:next})});toast('Moved to '+next);loadPipeline();}catch(e){toast(e.message,'e');}
+}
+async function removePipe(id){
+  try{await apiFetch('/api/pipeline/'+id,{method:'DELETE'});toast('Removed');loadPipeline();}catch(e){toast(e.message,'e');}
+}
+
+// ── SIGNALS ──────────────────────────────────────────────────────
+async function loadSignals(){
+  const f=getP('sig-filter').toLowerCase();
+  const sig=f==='all'?'':f;
+  const list=document.getElementById('sig-list');
+  list.innerHTML='<div class="empty"><div class="ld"></div></div>';
+  try{
+    const r=await apiFetch('/api/contacts?sig_type='+sig+'&sort=intent');
+    const cs=await r.json();
+    list.innerHTML=cs.map(c=>{
+      const s=SIG_META[c.sig_type]||SIG_META.hiring;
+      const ic=c.intent>=85?'var(--grn)':c.intent>=70?'var(--org)':'var(--red)';
+      return `<div class="card" style="margin-bottom:10px;display:flex;align-items:center;gap:12px">
+        ${av(c.name)}
+        <div style="flex:1;min-width:0">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-weight:600;font-size:13px">${c.name}</span>
+            <span style="font-size:11px;color:var(--t3)">${c.role} · ${c.company} · ${c.city}</span>
+          </div>
+          <div style="margin-top:4px;font-size:11px;color:${s.col};font-weight:500">⚡ ${c.signal}</div>
+        </div>
+        <div style="text-align:right;min-width:60px">
+          <div style="font-size:20px;font-weight:700;color:${ic};line-height:1">${c.intent}%</div>
+          <div style="font-size:10px;color:var(--t3)">intent</div>
+          ${ibar(c.intent)}
+        </div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <button class="btn btn-sm btn-g" onclick="gotoWriter(${c.id})">✍ Write</button>
+          <button class="btn btn-sm" onclick="addPipe(${c.id})">＋ Save</button>
+        </div>
+      </div>`;
+    }).join('');
+  }catch(e){list.innerHTML='<div class="empty"><div style="color:var(--red)">⚠ '+e.message+'</div></div>';}
+}
+
+// ── ANALYTICS ────────────────────────────────────────────────────
+async function loadAnalytics(){
+  try{
+    const r=await apiFetch('/api/analytics');
+    const d=await r.json();
+    const rem=d.credits.total-d.credits.used;
+    document.getElementById('an-kpi').innerHTML=[
+      {l:'Contacts revealed',v:d.revealed,col:'var(--blu)',bg:'var(--blu-bg)'},
+      {l:'In pipeline',v:d.pipelineTotal,col:'var(--grn)',bg:'var(--grn-bg)'},
+      {l:'AI emails written',v:d.emailsWritten,col:'var(--pur)',bg:'var(--pur-bg)'},
+      {l:'Credits remaining',v:rem,col:'var(--org)',bg:'var(--org-bg)'},
+    ].map(k=>`<div class="scard" style="background:${k.bg};border-color:transparent"><div style="font-size:11px;color:${k.col};opacity:.85">${k.l}</div><div class="sval" style="color:${k.col}">${k.v}</div></div>`).join('');
+    const SC={Steel:'#1d4ed8',FMCG:'#16a34a',Cement:'#c2410c','Real Estate':'#7c3aed'};
+    document.getElementById('an-sector').innerHTML=`<div style="font-weight:600;font-size:13px;margin-bottom:14px">Contacts by sector</div>`+
+      d.bySector.map(s=>`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px"><span style="font-weight:500">${s.sector}</span><span style="color:var(--t3)">${s.c} (${Math.round(s.c/d.totalContacts*100)}%)</span></div><div class="btrack"><div class="bfill" style="width:${Math.round(s.c/d.totalContacts*100)}%;background:${SC[s.sector]||'#888'}"></div></div></div>`).join('');
+    document.getElementById('an-intent').innerHTML=`<div style="font-weight:600;font-size:13px;margin-bottom:14px">Intent distribution</div>
+      <div class="g3" style="margin-bottom:14px">
+        ${[{l:'High ≥85%',v:d.intentDist.high,col:'var(--grn)',bg:'var(--grn-bg)'},{l:'Mid 70–84%',v:d.intentDist.mid,col:'var(--org)',bg:'var(--org-bg)'},{l:'Low <70%',v:d.intentDist.low,col:'var(--red)',bg:'var(--red-bg)'}].map(b=>`<div style="background:${b.bg};border-radius:8px;padding:12px;text-align:center"><div style="font-size:22px;font-weight:700;color:${b.col}">${b.v}</div><div style="font-size:10px;color:${b.col};opacity:.8;margin-top:3px">${b.l}</div></div>`).join('')}
+      </div>
+      <div style="font-weight:500;font-size:12px;margin-bottom:10px">By signal type</div>
+      ${d.bySignal.map(s=>{const c={hiring:'var(--grn)',expansion:'var(--blu)',funding:'var(--org)'}[s.sig_type]||'#888';return `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px"><span style="color:${c};font-weight:600">${s.sig_type}</span><span style="color:var(--t3)">${s.c}</span></div><div class="btrack" style="height:5px"><div class="bfill" style="height:5px;width:${Math.round(s.c/d.totalContacts*100)}%;background:${c}"></div></div></div>`;}).join('')}`;
+    document.getElementById('an-pipe').innerHTML=`<div style="font-weight:600;font-size:13px;margin-bottom:14px">Pipeline stages</div><div style="display:flex;gap:10px;flex-wrap:wrap">
+      ${d.byStage.map(s=>`<div style="flex:1;min-width:90px;background:${STAGE_META[s.stage]?.bg||'#f5f5f5'};border-radius:8px;padding:14px;text-align:center"><div style="font-size:22px;font-weight:700;color:${STAGE_META[s.stage]?.col||'#888'}">${s.c}</div><div style="font-size:11px;color:${STAGE_META[s.stage]?.col||'#888'};margin-top:3px">${STAGE_META[s.stage]?.lbl||s.stage}</div></div>`).join('')}
+    </div>`;
+  }catch(e){document.getElementById('an-kpi').innerHTML='<div style="grid-column:1/-1" class="empty"><div style="color:var(--red)">⚠ '+e.message+'</div></div>';}
+}
+
+// ── SETTINGS ─────────────────────────────────────────────────────
+function loadApiUrl(){
+  document.getElementById('api-url').value=localStorage.getItem('prospekta_api')||'';
+}
+async function saveApiUrl(){
+  const url=document.getElementById('api-url').value.trim().replace(/\/$/,'');
+  const st=document.getElementById('api-status');
+  st.innerHTML='<span style="color:var(--t3)">Testing…</span>';
+  try{
+    const r=await fetch(url+'/api/credits');
+    if(r.ok){
+      API=url;
+      localStorage.setItem('prospekta_api',url);
+      st.innerHTML='<span style="color:var(--grn)">✅ Connected! Backend is live.</span>';
+      toast('Backend connected ✓');
+      checkConn();
+    }else throw new Error('Bad response');
+  }catch(e){
+    st.innerHTML='<span style="color:var(--red)">❌ Cannot reach that URL. Check Railway is deployed and URL is correct.</span>';
+  }
+}
+function renderPlans(){
+  document.getElementById('plan-cards').innerHTML=PLANS.map(p=>`
+    <div class="plan-card${activePlan===p.id?' on':''}" onclick="activePlan='${p.id}';renderPlans()">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-weight:600;font-size:14px">${p.name}</span>
+          ${p.badge?`<span style="font-size:10px;background:var(--grn);color:#fff;padding:1px 7px;border-radius:10px;font-weight:700">${p.badge}</span>`:''}
+        </div>
+        <span style="font-weight:700;font-size:16px;color:var(--blu)">${p.price}</span>
+      </div>
+      <ul style="list-style:none;font-size:12px;color:var(--t2)">
+        ${p.features.map(f=>`<li style="padding:2px 0">✓ ${f}</li>`).join('')}
+      </ul>
+      ${activePlan===p.id?`<button class="btn btn-b btn-w" style="margin-top:10px" onclick="event.stopPropagation();toast('Redirecting to billing…')">Activate ${p.name} →</button>`:''}
+    </div>`).join('');
+}
+
+// ── Init ──────────────────────────────────────────────────────────
+checkConn();
+loadContacts();
+renderPlans();
+</script>
+</body>
+</html>
